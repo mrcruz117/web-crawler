@@ -1,24 +1,22 @@
-// normalize_url.go
 package main
 
 import (
+	"fmt"
 	"net/url"
 	"strings"
 )
 
-func normalizeURL(input string) (string, error) {
-	parsedURL, err := url.Parse(input)
+func normalizeURL(rawURL string) (string, error) {
+	parsedURL, err := url.Parse(rawURL)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("couldn't parse URL: %w", err)
 	}
 
-	// Remove scheme (http or https)
-	host := parsedURL.Host
-	if host == "" {
-		host = parsedURL.Path
-	}
+	fullPath := parsedURL.Host + parsedURL.Path
 
-	// Construct the path without trailing slash
-	path := strings.TrimSuffix(parsedURL.Path, "/")
-	return host + path, nil
+	fullPath = strings.ToLower(fullPath)
+
+	fullPath = strings.TrimSuffix(fullPath, "/")
+
+	return fullPath, nil
 }
