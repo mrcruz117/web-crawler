@@ -16,7 +16,7 @@ func main() {
 	}
 	rawBaseURL := os.Args[1]
 
-	const maxConcurrency = 3
+	const maxConcurrency = 20
 	cfg, err := configure(rawBaseURL, maxConcurrency)
 	if err != nil {
 		fmt.Printf("Error - configure: %v", err)
@@ -25,7 +25,7 @@ func main() {
 
 	fmt.Printf("starting crawl of: %s...\n", rawBaseURL)
 
-	cfg.wg.Add(2)
+	cfg.wg.Add(1)
 	go cfg.crawlPage(rawBaseURL)
 	cfg.wg.Wait()
 
